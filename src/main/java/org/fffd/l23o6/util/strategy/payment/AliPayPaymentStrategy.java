@@ -12,6 +12,7 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 
 public class AliPayPaymentStrategy extends PaymentStrategy {
+    //支付宝支付策略
     public static final AliPayPaymentStrategy INSTANCE = new AliPayPaymentStrategy();
     private final class AlipayConfig{
         public static String APP_ID = "9021000122697460";
