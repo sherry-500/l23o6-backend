@@ -50,6 +50,7 @@ public class OrderEntity {
     @UpdateTimestamp
     private Date updatedAt;
 
+    //新增订单价格和实际支付价格
     @NotNull
     private int price;
 
