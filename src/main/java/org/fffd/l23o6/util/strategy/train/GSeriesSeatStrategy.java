@@ -23,7 +23,7 @@ public class GSeriesSeatStrategy extends TrainSeatStrategy {
 
 
     private GSeriesSeatStrategy() {
-
+        //高铁策略
         int counter = 0;
 
         for (String s : Arrays.asList("1车1A","1车1C","1车1F")) {
@@ -62,7 +62,6 @@ public class GSeriesSeatStrategy extends TrainSeatStrategy {
 
     public @Nullable String allocSeat(int startStationIndex, int endStationIndex, GSeriesSeatType type, boolean[][] seatMap) {
         //endStationIndex - 1 = upper bound
-
         int lower_bound = 0;
         int upper_bound = 0;
         if (type.getText().equals("商务座")){
