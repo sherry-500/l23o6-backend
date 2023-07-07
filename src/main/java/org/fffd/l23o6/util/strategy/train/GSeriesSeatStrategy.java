@@ -74,6 +74,7 @@ public class GSeriesSeatStrategy extends TrainSeatStrategy {
             upper_bound = lower_bound + SECOND_CLASS_SEAT_MAP.size();
         }
 
+        //所需类型的车票在seatMap中的下界
         int i = lower_bound;
         for(; i < upper_bound; i++){
             int j = startStationIndex;
