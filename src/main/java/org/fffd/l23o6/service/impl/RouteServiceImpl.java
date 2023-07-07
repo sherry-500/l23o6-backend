@@ -28,11 +28,6 @@ public class RouteServiceImpl implements RouteService {
         return routeDao.findAll(Sort.by(Sort.Direction.ASC, "name")).stream().map(RouteMapper.INSTANCE::toRouteVO).collect(Collectors.toList());
     }
 
-//    public List<RouteVO> listRoutesByStationIdsContaining(Long startStationId, Long endStationId){
-//        List<RouteEntity> routes = routeDao.findByStationIdsContaining(startStationId, endStationId);
-//        return routes.stream().map(RouteMapper.INSTANCE::toRouteVO).collect(Collectors.toList());
-//    }
-
     @Override
     public RouteVO getRoute(Long id) {
         RouteEntity entity = routeDao.findById(id).get();

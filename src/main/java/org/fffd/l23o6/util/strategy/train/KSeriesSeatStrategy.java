@@ -22,7 +22,7 @@ public class KSeriesSeatStrategy extends TrainSeatStrategy {
 
 
     private KSeriesSeatStrategy() {
-
+        //普通列车策略
         int counter = 0;
 
         for (String s : Arrays.asList("软卧1号上铺", "软卧2号下铺", "软卧3号上铺", "软卧4号上铺", "软卧5号上铺", "软卧6号下铺", "软卧7号上铺", "软卧8号上铺")) {
