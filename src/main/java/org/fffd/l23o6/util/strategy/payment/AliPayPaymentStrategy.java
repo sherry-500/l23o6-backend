@@ -2,12 +2,14 @@ package org.fffd.l23o6.util.strategy.payment;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.*;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import java.io.IOException;
 import java.util.Map;
 
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 
 public class AliPayPaymentStrategy extends PaymentStrategy {
     public static final AliPayPaymentStrategy INSTANCE = new AliPayPaymentStrategy();
@@ -44,7 +46,6 @@ public class AliPayPaymentStrategy extends PaymentStrategy {
         bizContent.put("subject", seat);
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
 
-
         alipayRequest.setBizContent(bizContent.toString());
         try {
             AlipayTradePagePayResponse response = client.pageExecute(alipayRequest);
@@ -75,5 +76,29 @@ public class AliPayPaymentStrategy extends PaymentStrategy {
         }
 
         return amount;
+    }
+
+    public void refund(Long orderId, double amount){
+        System.out.println(amount);
+        //获得初始化的AlipayClient
+        AlipayClient client = new DefaultAlipayClient(AlipayConfig.GATEWAY_URL, AlipayConfig.APP_ID, AlipayConfig.MERCHANT_PRIVATE_KEY, "json", AlipayConfig.CHARSET, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGN_TYPE);
+        //设置请求参数
+        AlipayTradeRefundRequest alipayRequest = new AlipayTradeRefundRequest();
+
+        JSONObject bizContent = new JSONObject();
+        bizContent.put("out_trade_no", orderId.toString());
+        bizContent.put("refund_amount", amount);
+
+        alipayRequest.setBizContent(bizContent.toString());
+        try {
+            AlipayTradeRefundResponse response = client.execute(alipayRequest);
+            if(response.isSuccess()){
+                System.out.println("退款成功");
+            }else{
+                System.out.println("退款失败");
+            }
+        }catch(AlipayApiException e){
+            e.printStackTrace();
+        }
     }
 }

@@ -55,6 +55,7 @@ public class OrderController {
                 result = orderService.payOrder(orderId, 1);
                 break;
             case CANCELLED:
+                System.out.println("取消订单");
                 orderService.cancelOrder(orderId);
                 break;
             default:

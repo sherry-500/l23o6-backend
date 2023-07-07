@@ -1,5 +1,6 @@
 package org.fffd.l23o6.service.impl;
 
+import java.security.AlgorithmConstraints;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
                 .startStationId(order.getDepartureStationId())
                 .endStationId(order.getArrivalStationId())
                 .departureTime(train.getDepartureTimes().get(startIndex))
-                .arrivalTime(train.getArrivalTimes().get(endIndex))
+                .arrivalTime(train.getArrivalTimes().get(endIndex)).price(order.getPrice())
                 .build();
     }
 
@@ -111,10 +112,11 @@ public class OrderServiceImpl implements OrderService {
         // TODO: refund user's money and credits if needed
         //用户实际支付的金额，需要退还
         double payPrice = order.getPayPrice();
-        //TODO:退还支付金额
-
-        //用户消耗的积分，需要返还（若未花钱则证明是积分支付）;默认10倍的积分抵消票价
-        if (payPrice == 0){
+        if(order.getStatus() == OrderStatus.PAID){
+            //退还支付金额
+            AliPayPaymentStrategy.INSTANCE.refund(order.getId(), payPrice);
+        }else if(order.getStatus() == OrderStatus.OPAID){
+            //用户消耗的积分，需要返还（若未花钱则证明是积分支付）;默认10倍的积分抵消票价
             int mileAgePoint = order.getPrice() * 10;
             user.setMileagePoints(user.getMileagePoints() + mileAgePoint);
         }
@@ -135,8 +137,8 @@ public class OrderServiceImpl implements OrderService {
             throw new BizException(BizError.ILLEAGAL_ORDER_STATUS);
         }
 
-        // TODO: use payment strategy to pay!
-        // TODO: update user's credits, so that user can get discount next time
+        //use payment strategy to pay!
+        //update user's credits, so that user can get discount next time
 
         if (payMethod == 0){
             //使用积分支付则不能使用积分优惠，积分不足则支付失败
@@ -146,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
             user.setMileagePoints(user.getMileagePoints() - (int)amount);
             order.setPayPrice(0);
             userDao.save(user);
-
+            order.setStatus(OrderStatus.OPAID);
         }else {
             //使用支付宝支付则自动计算积分优惠，使用优惠不扣除相应积分（类似于会员等级）
             //实际支付的前按10:1的比例计算为积分
@@ -156,10 +158,9 @@ public class OrderServiceImpl implements OrderService {
             user.setMileagePoints(user.getMileagePoints() + (int)amount / 10);
             order.setPayPrice(amount);
             userDao.save(user);
-
+            order.setStatus(OrderStatus.PAID);
         }
 
-        order.setStatus(OrderStatus.COMPLETED);
         orderDao.save(order);
 
         return result;
