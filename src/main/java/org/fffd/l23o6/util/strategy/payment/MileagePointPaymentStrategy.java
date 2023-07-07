@@ -7,6 +7,7 @@ import org.fffd.l23o6.pojo.entity.OrderEntity;
 import org.fffd.l23o6.pojo.entity.UserEntity;
 
 public class MileagePointPaymentStrategy extends PaymentStrategy{
+    //积分支付策略
     public static final MileagePointPaymentStrategy INSTANCE = new MileagePointPaymentStrategy();
 
     public String pay(Long orderId, String seat, double amount){
