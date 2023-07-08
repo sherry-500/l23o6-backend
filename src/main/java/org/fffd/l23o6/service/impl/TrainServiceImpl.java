@@ -224,6 +224,7 @@ public class TrainServiceImpl implements TrainService {
             throw new BizException(CommonErrorType.ILLEGAL_ARGUMENTS, "列表长度错误");
         }
 
+        //时间是否合法
         String[] month = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         String[] date_split = date.split("-");
         String[] arrival_split = train.getArrivalTimes().get(0).toString().split(" ");
