@@ -8,6 +8,7 @@ import org.fffd.l23o6.pojo.vo.train.AdminTrainVO;
 import org.fffd.l23o6.pojo.vo.train.ListTrainRequest;
 import org.fffd.l23o6.pojo.vo.train.TrainDetailVO;
 import org.fffd.l23o6.pojo.vo.train.TrainVO;
+import org.fffd.l23o6.service.StationService;
 import org.fffd.l23o6.service.TrainService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +30,7 @@ import lombok.AllArgsConstructor;
 public class TrainController {
 
     private final TrainService trainService;
+    private final StationService stationService;
 
     @GetMapping("train")
     public CommonResponse<List<TrainVO>> listTrains(@Valid ListTrainRequest request) {
@@ -66,6 +68,12 @@ public class TrainController {
     @DeleteMapping("admin/train/{trainId}")
     public CommonResponse<?> deleteTrain(@PathVariable Long trainId) {
         trainService.deleteTrain(trainId);
+        return CommonResponse.success();
+    }
+
+    @DeleteMapping("admin/station/{stationId}")
+    public CommonResponse<?> deleteStation(@PathVariable("stationId") Long stationId) {
+        stationService.deleteStation(stationId);
         return CommonResponse.success();
     }
 }
